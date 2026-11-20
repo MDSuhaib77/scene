@@ -1,0 +1,6 @@
+{
+  "name": "/plɑːn/",
+  "description": "An intelligent Indian cinematic production scheduler and real-time labor compliance auditor across regional film guilds (FWICE, FEFSI, TFIEF, FEFKA, KFWF).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

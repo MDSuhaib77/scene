@@ -1,0 +1,1012 @@
+@import url('https://fonts.cdnfonts.com/css/ds-digital');
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-digital: "DS-Digital", "Share Tech Mono", ui-monospace, monospace;
+  --font-screenplay: "Courier Prime", "Courier New", Courier, monospace;
+}
+
+html, body, #root {
+  min-height: 100%;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  background-color: #070A12;
+  color-scheme: dark;
+}
+
+html.light, body.light, html.light #root {
+  background-color: #f3f5f4;
+  color-scheme: light;
+}
+
+@layer utilities {
+  .animate-pulse-dot {
+    animation: pulseDotMatrix 8s ease-in-out infinite alternate;
+  }
+}
+
+/* Fluid living background keyframes (organic ambient drift) */
+@keyframes ambientDrift1 {
+  0% { transform: translate3d(0px, 0px, 0) scale(1); }
+  33% { transform: translate3d(40px, -50px, 0) scale(1.08); }
+  66% { transform: translate3d(-35px, 30px, 0) scale(0.95); }
+  100% { transform: translate3d(0px, 0px, 0) scale(1); }
+}
+
+@keyframes ambientDrift2 {
+  0% { transform: translate3d(0px, 0px, 0) scale(1); }
+  40% { transform: translate3d(-60px, 45px, 0) scale(1.12); }
+  75% { transform: translate3d(50px, -30px, 0) scale(0.92); }
+  100% { transform: translate3d(0px, 0px, 0) scale(1); }
+}
+
+@keyframes ambientDrift3 {
+  0% { transform: translate3d(0px, 0px, 0) scale(0.96); opacity: 0.28; }
+  50% { transform: translate3d(30px, 40px, 0) scale(1.1); opacity: 0.42; }
+  100% { transform: translate3d(0px, 0px, 0) scale(0.96); opacity: 0.28; }
+}
+
+@keyframes ambientDrift4 {
+  0% { transform: translate3d(0px, 0px, 0) scale(1); }
+  45% { transform: translate3d(-40px, -35px, 0) scale(1.06); }
+  85% { transform: translate3d(25px, 20px, 0) scale(0.97); }
+  100% { transform: translate3d(0px, 0px, 0) scale(1); }
+}
+
+.animate-ambient-1,
+.animate-ambient-2,
+.animate-ambient-3,
+.animate-ambient-4 {
+  will-change: auto;
+}
+
+/* Slow horizontal marquee for SCENE outlined background wordmark */
+@keyframes marqueeSlow {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+.animate-marquee-slow {
+  display: flex;
+  width: max-content;
+  animation: marqueeSlow 50s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-slow:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-slow {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* Custom sleek thin scrollbar */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-cinema::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.scrollbar-cinema::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-cinema::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+.scrollbar-cinema::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+@keyframes pulseDotMatrix {
+  0% {
+    opacity: 0.15;
+    background-size: 14px 14px;
+  }
+  50% {
+    opacity: 0.45;
+    background-size: 16px 16px;
+  }
+  100% {
+    opacity: 0.25;
+    background-size: 15px 15px;
+  }
+}
+
+.dot-matrix-overlay {
+  background-image: radial-gradient(rgba(80, 193, 5, 0.20) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+/* Plan color palette key styling utilities */
+.brand-gradient {
+  background: linear-gradient(135deg, #01164c 0%, #50c105 100%);
+}
+
+.brand-text-gradient {
+  background: linear-gradient(to right, #4facfe 0%, #50c105 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-border-glow:hover {
+  border-color: #50c105;
+  box-shadow: 0 0 15px rgba(80, 193, 5, 0.25);
+}
+
+/* =========================================================================
+   SCENEOS COHESIVE DESIGN SYSTEM TOKENS (Gemini-Inspired Cinema UX)
+   ========================================================================= */
+
+/* Tabular Numerals for Metrics, Counts, Clocks and Dates */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  -moz-font-feature-settings: "tnum";
+  -webkit-font-feature-settings: "tnum";
+  font-feature-settings: "tnum";
+}
+
+/* Atmospheric Directional Ambient Light */
+.ambient-glow-cyan {
+  background: radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.35) 0%, rgba(14, 165, 233, 0.18) 40%, transparent 75%);
+}
+
+.ambient-glow-indigo {
+  background: radial-gradient(circle at 60% 60%, rgba(99, 102, 241, 0.32) 0%, rgba(139, 92, 246, 0.16) 45%, transparent 75%);
+}
+
+.ambient-glow-emerald {
+  background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.28) 0%, rgba(13, 148, 136, 0.14) 45%, transparent 75%);
+}
+
+/* Accessible Focus Ring */
+.focus-ring-cinema {
+  outline: none;
+}
+.focus-ring-cinema:focus-visible {
+  outline: 2px solid rgba(6, 182, 212, 0.85);
+  outline-offset: 2px;
+}
+
+/* Smooth Atmospheric Transition */
+.transition-cinema {
+  transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-duration: 220ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transition-cinema,
+  .animate-pulse-dot,
+  .animate-fade-in,
+  .animate-ambient-1,
+  .animate-ambient-2,
+  .animate-ambient-3,
+  .animate-ambient-4 {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================================================
+   SCENEOS HARDWARE CURSOR MODE
+   Always preserve native hardware pointer for instant zero-lag response.
+   ========================================================================= */
+
+html, body, #root {
+  cursor: auto;
+}
+
+/* Obscure scrollbar for Screenplay Focus Mode while keeping full scroll functionality */
+.scrollbar-obscure {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE & Edge */
+}
+.scrollbar-obscure::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+}
+
+/* =========================================================================
+   SCENE BREAKDOWN MODULE — LIQUID GLASS & CINEMATIC EMERALD IDENTITY
+   ========================================================================= */
+
+:root {
+  --brk-bg-app: #030806;
+  --brk-bg-gradient: radial-gradient(1100px circle at 15% 10%, rgba(16, 185, 129, 0.14), transparent 55%), radial-gradient(900px circle at 85% 85%, rgba(20, 184, 166, 0.12), transparent 50%), radial-gradient(600px circle at 50% 50%, rgba(163, 230, 53, 0.05), transparent 60%), #020b06;
+  --brk-bg-surface: rgba(4, 16, 11, 0.85);
+  --brk-bg-panel: rgba(5, 22, 15, 0.90);
+  --brk-bg-card: rgba(6, 26, 18, 0.70);
+  --brk-bg-hover: rgba(16, 185, 129, 0.12);
+  --brk-bg-active: rgba(16, 185, 129, 0.22);
+  --brk-border: rgba(16, 185, 129, 0.18);
+  --brk-border-strong: rgba(16, 185, 129, 0.35);
+  --brk-accent-emerald: #10b981;
+  --brk-accent-lime: #a3e635;
+  --brk-accent-teal: #14b8a6;
+  --brk-text-primary: #ecfdf5;
+  --brk-text-secondary: #a7f3d0;
+  --brk-text-muted: #6ee7b7;
+
+  /* =========================================================================
+     SCENE PRODUCTION MODULE — LIQUID GLASS & CINEMATIC RUBY / CRIMSON PALETTE
+     ========================================================================= */
+  --prod-bg-app: #10090D;
+  --prod-bg-surface: #1A1017;
+  --prod-bg-elevated: #26151F;
+  --prod-accent-scarlet: #FF1744;
+  --prod-accent-crimson: #E63950;
+  --prod-accent-ruby: #C21845;
+  --prod-accent-highlight: #FF5368;
+  --prod-accent-rose: #FF8A9B;
+  --prod-accent-burgundy: #65152D;
+  --prod-border-subtle: rgba(230, 57, 80, 0.20);
+  --prod-border-strong: rgba(255, 23, 68, 0.40);
+  --prod-glass-surface: rgba(26, 16, 23, 0.82);
+  --prod-glass-elevated: rgba(38, 21, 31, 0.88);
+
+  /* =========================================================================
+     SCENE VISUALISE MODULE — LIQUID GLASS & ELECTRIC YELLOW / GOLDEN SPECTRUM
+     ========================================================================= */
+  --vis-bg-app: #0A0B0D;
+  --vis-bg-surface: #15171A;
+  --vis-bg-elevated: #1F2226;
+  --vis-accent-yellow: #F5F000;
+  --vis-accent-gold: #FFD34E;
+  --vis-accent-amber: #F5A623;
+  --vis-accent-champagne: #FFF1A8;
+  --vis-accent-burnished: #9C741C;
+  --vis-border-subtle: rgba(245, 240, 0, 0.18);
+  --vis-border-strong: rgba(255, 211, 78, 0.35);
+  --vis-glass-surface: rgba(21, 23, 26, 0.82);
+  --vis-glass-elevated: rgba(31, 34, 38, 0.88);
+
+  /* =========================================================================
+     SCENE VAULT MODULE — AMETHYST & ELECTRIC VIOLET CINEMATIC ARCHIVE
+     ========================================================================= */
+  --vault-bg-app: #10091B;
+  --vault-bg-surface: #191126;
+  --vault-bg-elevated: #211632;
+  --vault-bg-deepest: #0B0712;
+  --vault-accent-amethyst: #B45CFF;
+  --vault-accent-violet: #923BFF;
+  --vault-accent-deep-violet: #7628D9;
+  --vault-accent-lavender: #D18AFF;
+  --vault-accent-lilac: #E6C2FF;
+  --vault-accent-plum: #42156F;
+  --vault-border-subtle: rgba(180, 92, 255, 0.18);
+  --vault-border-strong: rgba(146, 59, 255, 0.35);
+  --vault-glass-surface: rgba(25, 17, 38, 0.82);
+  --vault-glass-elevated: rgba(33, 22, 50, 0.88);
+}
+
+.production-atmospheric-bg {
+  background: radial-gradient(1200px circle at 15% 10%, rgba(101, 21, 45, 0.45), transparent 55%),
+              radial-gradient(1000px circle at 85% 85%, rgba(230, 57, 80, 0.25), transparent 50%),
+              radial-gradient(800px circle at 50% 30%, rgba(194, 24, 69, 0.20), transparent 60%),
+              radial-gradient(900px circle at 30% 90%, rgba(101, 21, 45, 0.35), transparent 50%),
+              #10090D !important;
+}
+
+.production-glass-panel {
+  background: rgba(26, 16, 23, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(230, 57, 80, 0.22);
+}
+
+.production-glass-card {
+  background: rgba(38, 21, 31, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(230, 57, 80, 0.24);
+}
+
+.visualize-atmospheric-bg {
+  background: radial-gradient(1200px circle at 15% 10%, rgba(245, 240, 0, 0.12), transparent 55%),
+              radial-gradient(1000px circle at 85% 85%, rgba(245, 166, 35, 0.10), transparent 50%),
+              radial-gradient(800px circle at 50% 30%, rgba(255, 211, 78, 0.08), transparent 60%),
+              radial-gradient(900px circle at 30% 90%, rgba(156, 116, 28, 0.14), transparent 50%),
+              #0A0B0D !important;
+}
+
+.visualize-glass-panel {
+  background: rgba(21, 23, 26, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 240, 0, 0.18);
+}
+
+.visualize-glass-card {
+  background: rgba(31, 34, 38, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 211, 78, 0.20);
+}
+
+.vault-atmospheric-bg {
+  background: radial-gradient(1200px circle at 15% 10%, rgba(66, 21, 111, 0.45), transparent 55%),
+              radial-gradient(1000px circle at 85% 85%, rgba(146, 59, 255, 0.22), transparent 50%),
+              radial-gradient(800px circle at 50% 30%, rgba(180, 92, 255, 0.16), transparent 60%),
+              radial-gradient(900px circle at 30% 90%, rgba(66, 21, 111, 0.35), transparent 50%),
+              #10091B !important;
+}
+
+.vault-glass-panel {
+  background: rgba(25, 17, 38, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(180, 92, 255, 0.20);
+}
+
+.vault-glass-card {
+  background: rgba(33, 22, 50, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(180, 92, 255, 0.22);
+}
+
+.breakdown-atmospheric-bg {
+  background: radial-gradient(1100px circle at 15% 10%, rgba(16, 185, 129, 0.14), transparent 55%),
+              radial-gradient(900px circle at 85% 85%, rgba(20, 184, 166, 0.12), transparent 50%),
+              radial-gradient(600px circle at 50% 50%, rgba(163, 230, 53, 0.05), transparent 60%),
+              #020b06 !important;
+}
+
+html.light {
+  /* Breakdown Module (Emerald & Deep Teal Spectrum) */
+  --brk-bg-app: #f0fdf4;
+  --brk-bg-surface: #ffffff;
+  --brk-bg-panel: #ffffff;
+  --brk-bg-card: #f8faf9;
+  --brk-bg-hover: rgba(16, 185, 129, 0.08);
+  --brk-bg-active: rgba(16, 185, 129, 0.16);
+  --brk-border: rgba(16, 185, 129, 0.20);
+  --brk-border-strong: rgba(16, 185, 129, 0.35);
+  --brk-accent-emerald: #059669;
+  --brk-accent-lime: #65a30d;
+  --brk-accent-teal: #0d9488;
+  --brk-text-primary: #064e3b;
+  --brk-text-secondary: #047857;
+  --brk-text-muted: #059669;
+
+  /* Production Module (Ruby Red & Crimson Spectrum) */
+  --prod-bg-app: #fff5f6;
+  --prod-bg-surface: #ffffff;
+  --prod-bg-elevated: #fff1f2;
+  --prod-accent-scarlet: #e11d48;
+  --prod-accent-crimson: #be123c;
+  --prod-accent-ruby: #9f1239;
+  --prod-accent-highlight: #f43f5e;
+  --prod-accent-rose: #fb7185;
+  --prod-accent-burgundy: #881337;
+  --prod-border-subtle: rgba(225, 29, 72, 0.16);
+  --prod-border-strong: rgba(225, 29, 72, 0.35);
+  --prod-glass-surface: rgba(255, 255, 255, 0.90);
+  --prod-glass-elevated: rgba(255, 241, 242, 0.94);
+
+  /* Visualise Module (Electric Yellow, Gold & Amber Spectrum) */
+  --vis-bg-app: #fffdf5;
+  --vis-bg-surface: #ffffff;
+  --vis-bg-elevated: #fefce8;
+  --vis-accent-yellow: #ca8a04;
+  --vis-accent-gold: #d97706;
+  --vis-accent-amber: #b45309;
+  --vis-accent-champagne: #fef08a;
+  --vis-accent-burnished: #854d0e;
+  --vis-border-subtle: rgba(217, 119, 6, 0.18);
+  --vis-border-strong: rgba(202, 138, 4, 0.35);
+  --vis-glass-surface: rgba(255, 255, 255, 0.90);
+  --vis-glass-elevated: rgba(254, 252, 232, 0.94);
+
+  /* Vault Module (Amethyst & Electric Violet Spectrum) */
+  --vault-bg-app: #faf7ff;
+  --vault-bg-surface: #ffffff;
+  --vault-bg-elevated: #f5f3ff;
+  --vault-bg-deepest: #ede9fe;
+  --vault-accent-amethyst: #7c3aed;
+  --vault-accent-violet: #6d28d9;
+  --vault-accent-deep-violet: #5b21b6;
+  --vault-accent-lavender: #8b5cf6;
+  --vault-accent-lilac: #c4b5fd;
+  --vault-accent-plum: #4c1d95;
+  --vault-border-subtle: rgba(124, 58, 237, 0.18);
+  --vault-border-strong: rgba(109, 40, 217, 0.35);
+  --vault-glass-surface: rgba(255, 255, 255, 0.90);
+  --vault-glass-elevated: rgba(245, 243, 255, 0.94);
+
+  /* Screenplay Module (Electric Cyan & Neon Violet Spectrum) */
+  --scr-bg-app: #f0f9ff;
+  --scr-bg-surface: #ffffff;
+  --scr-bg-rail: #ffffff;
+  --scr-bg-panel: #f8fafc;
+  --scr-bg-toolbar: #f8fafc;
+  --scr-bg-hover: rgba(8, 145, 178, 0.08);
+  --scr-bg-active: rgba(8, 145, 178, 0.16);
+  --scr-border: rgba(8, 145, 178, 0.18);
+  --scr-border-strong: rgba(8, 145, 178, 0.35);
+  --scr-text-primary: #0f172a;
+  --scr-text-secondary: #334155;
+  --scr-text-muted: #64748b;
+  --scr-accent: #0891b2;
+  --scr-accent-violet: #7c3aed;
+  --scr-page-bg: #ffffff;
+  --scr-page-text: #111315;
+  --scr-page-shadow: 0 12px 32px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+/* Light Mode Atmospheric Backgrounds & Glass Panels */
+html.light .production-atmospheric-bg {
+  background: radial-gradient(1200px circle at 15% 10%, rgba(244, 63, 94, 0.08), transparent 55%),
+              radial-gradient(1000px circle at 85% 85%, rgba(225, 29, 72, 0.06), transparent 50%),
+              radial-gradient(800px circle at 50% 30%, rgba(251, 113, 133, 0.07), transparent 60%),
+              #fff5f6 !important;
+}
+
+html.light .production-glass-panel {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(225, 29, 72, 0.16) !important;
+  box-shadow: 0 4px 20px -2px rgba(225, 29, 72, 0.06);
+}
+
+html.light .production-glass-card {
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(225, 29, 72, 0.18) !important;
+  box-shadow: 0 4px 16px -2px rgba(225, 29, 72, 0.05);
+}
+
+html.light .visualize-atmospheric-bg {
+  background: radial-gradient(1200px circle at 15% 10%, rgba(234, 179, 8, 0.09), transparent 55%),
+              radial-gradient(1000px circle at 85% 85%, rgba(217, 119, 6, 0.07), transparent 50%),
+              radial-gradient(800px circle at 50% 30%, rgba(250, 204, 21, 0.06), transparent 60%),
+              #fffdf5 !important;
+}
+
+html.light .visualize-glass-panel {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(217, 119, 6, 0.18) !important;
+  box-shadow: 0 4px 20px -2px rgba(217, 119, 6, 0.06);
+}
+
+html.light .visualize-glass-card {
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(217, 119, 6, 0.20) !important;
+  box-shadow: 0 4px 16px -2px rgba(217, 119, 6, 0.05);
+}
+
+html.light .vault-atmospheric-bg {
+  background: radial-gradient(1200px circle at 15% 10%, rgba(124, 58, 237, 0.08), transparent 55%),
+              radial-gradient(1000px circle at 85% 85%, rgba(109, 40, 217, 0.06), transparent 50%),
+              radial-gradient(800px circle at 50% 30%, rgba(139, 92, 246, 0.07), transparent 60%),
+              #faf7ff !important;
+}
+
+html.light .vault-glass-panel {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(124, 58, 237, 0.16) !important;
+  box-shadow: 0 4px 20px -2px rgba(124, 58, 237, 0.06);
+}
+
+html.light .vault-glass-card {
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(124, 58, 237, 0.18) !important;
+  box-shadow: 0 4px 16px -2px rgba(124, 58, 237, 0.05);
+}
+
+html.light .breakdown-atmospheric-bg {
+  background: radial-gradient(1100px circle at 15% 10%, rgba(16, 185, 129, 0.09), transparent 55%),
+              radial-gradient(900px circle at 85% 85%, rgba(20, 184, 166, 0.07), transparent 50%),
+              radial-gradient(600px circle at 50% 50%, rgba(132, 204, 22, 0.05), transparent 60%),
+              #f0fdf4 !important;
+}
+
+/* Light Mode Universal Modals, Drawers & Dialogs */
+html.light .fixed.inset-0.bg-black\/80,
+html.light .fixed.inset-0.bg-black\/70,
+html.light .fixed.inset-0.bg-black\/60 {
+  background-color: rgba(15, 23, 42, 0.40) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+html.light .bg-\[\#0B0E17\],
+html.light .bg-\[\#0b0e17\],
+html.light .bg-\[\#0B0C16\],
+html.light .bg-\[\#101521\],
+html.light .bg-\[\#090D1A\],
+html.light .bg-\[\#080C14\],
+html.light .bg-\[\#0e1322\],
+html.light .bg-\[\#080b18\],
+html.light .bg-\[\#030e09\],
+html.light .bg-\[\#030806\],
+html.light .bg-\[\#10090D\],
+html.light .bg-\[\#1A1017\],
+html.light .bg-\[\#0A0B0D\],
+html.light .bg-\[\#15171A\],
+html.light .bg-\[\#10091B\],
+html.light .bg-\[\#191126\] {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #0f172a !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+}
+
+html.light input,
+html.light select,
+html.light textarea {
+  color: #0f172a !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* =========================================================================
+   SCENEOS SCREENPLAY WORKSPACE FOUNDATION TOKENS & MANUSCRIPT STYLING
+   ========================================================================= */
+
+:root {
+  --scr-bg-app: #080b18;
+  --scr-bg-rail: rgba(8, 11, 24, 0.85);
+  --scr-bg-panel: rgba(11, 15, 34, 0.90);
+  --scr-bg-toolbar: rgba(10, 14, 28, 0.88);
+  --scr-bg-hover: rgba(0, 242, 254, 0.08);
+  --scr-bg-active: rgba(0, 242, 254, 0.16);
+  --scr-border: rgba(0, 242, 254, 0.12);
+  --scr-border-strong: rgba(0, 242, 254, 0.25);
+  --scr-text-primary: #eef1f6;
+  --scr-text-secondary: #9ba3b4;
+  --scr-text-muted: #646d80;
+  --scr-accent: #00f2fe;
+  --scr-accent-violet: #a855f7;
+  --scr-page-bg: #ffffff;
+  --scr-page-text: #111315;
+  --scr-page-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+/* US Letter Portrait Manuscript Page (8.5in x 11in @ 96 DPI = 816px x 1056px) */
+.scr-manuscript-page {
+  width: 816px;
+  min-width: 816px;
+  height: 1056px;
+  min-height: 1056px;
+  flex-shrink: 0;
+  background-color: var(--scr-page-bg);
+  color: var(--scr-page-text);
+  box-shadow: var(--scr-page-shadow);
+  border-radius: 0;
+  box-sizing: border-box;
+  font-family: "Courier Prime", "Courier New", Courier, monospace;
+  font-size: 12pt;
+  line-height: 1.25;
+  letter-spacing: 0;
+  position: relative;
+}
+
+.scr-manuscript-editor .ProseMirror {
+  outline: none !important;
+  min-height: 864px;
+  font-family: "Courier Prime", "Courier New", Courier, monospace;
+  font-size: 12pt;
+  line-height: 1.25;
+  color: var(--scr-page-text);
+  caret-color: #111315;
+  background: transparent;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.scr-manuscript-editor .ProseMirror p {
+  margin: 14px 0 0 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.scr-manuscript-editor .ProseMirror > *:first-child {
+  margin-top: 0 !important;
+}
+
+.scr-manuscript-editor .ProseMirror ::selection {
+  background: rgba(16, 185, 129, 0.22);
+  color: #111315;
+}
+
+/* =========================================================================
+   SCENEOS SEMANTIC SCREENPLAY ELEMENT FORMATTING RULES (Prompt 02 & 03)
+   All blocks use margin-bottom: 0 and explicit margin-top (in px) so
+   vertical spacing never collapses ambiguously across page boundaries.
+   ========================================================================= */
+
+.scr-manuscript-editor .scr-el,
+.scr-manuscript-editor .ProseMirror > .react-renderer {
+  font-family: "Courier Prime", "Courier New", Courier, monospace;
+  font-size: 12pt;
+  line-height: 1.25;
+  color: var(--scr-page-text);
+  box-sizing: border-box;
+  position: relative;
+  margin-bottom: 0;
+}
+
+/* 1. Scene Heading */
+.scr-manuscript-editor .scr-el-scene-heading {
+  text-align: left;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 0;
+  letter-spacing: 0.01em;
+}
+
+/* 2. Action */
+.scr-manuscript-editor .scr-el-action {
+  text-align: left;
+  margin-top: 14px;
+  margin-bottom: 0;
+}
+
+/* 3. Character Cue */
+.scr-manuscript-editor .scr-el-character {
+  padding-left: 2.15in;
+  padding-right: 0.5in;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 14px;
+  margin-bottom: 0;
+}
+
+/* 4. Parenthetical */
+.scr-manuscript-editor .scr-el-parenthetical {
+  padding-left: 1.55in;
+  padding-right: 1.85in;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* 5. Dialogue */
+.scr-manuscript-editor .scr-el-dialogue {
+  padding-left: 1in;
+  padding-right: 1.45in;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+/* Keep consecutive character / parenthetical / dialogue blocks tightly grouped */
+.scr-manuscript-editor .scr-el-character + .scr-el-parenthetical,
+.scr-manuscript-editor .scr-el-character + .scr-el-dialogue,
+.scr-manuscript-editor .scr-el-parenthetical + .scr-el-dialogue,
+.scr-manuscript-editor .scr-el-dialogue + .scr-el-parenthetical {
+  margin-top: 0;
+}
+
+.scr-manuscript-editor .scr-el-dialogue + .scr-el-dialogue {
+  margin-top: 6px;
+}
+
+/* 6. Transition */
+.scr-manuscript-editor .scr-el-transition {
+  text-align: right;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+/* 7. Shot */
+.scr-manuscript-editor .scr-el-shot {
+  text-align: left;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+/* 8. General Text */
+.scr-manuscript-editor .scr-el-general-text {
+  text-align: left;
+  font-weight: 400;
+  text-transform: none;
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+/* 9. Script Note (Clearly distinguishable from manuscript text) */
+.scr-manuscript-editor .ProseMirror > .node-screenplayNote,
+.scr-manuscript-editor .scr-el-note {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+.scr-manuscript-editor .scr-el-note {
+  background-color: #fffbeb;
+  border: 1px solid rgba(217, 119, 6, 0.35);
+  border-left: 4px solid #d97706;
+  padding: 0.45rem 0.75rem 0.55rem 0.75rem;
+  color: #78350f;
+  font-size: 10.5pt;
+  line-height: 1.35;
+}
+
+/* 10. Act Heading & 11. End Act Marker */
+.scr-manuscript-editor .scr-el-act-heading,
+.scr-manuscript-editor .scr-el-end-act {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin-top: 26px;
+  margin-bottom: 0;
+}
+
+/* 12. Sequence Heading */
+.scr-manuscript-editor .scr-el-sequence-heading {
+  text-align: left;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-bottom: 1px dashed #cbd5e1;
+  padding-bottom: 4px;
+  margin-top: 22px;
+  margin-bottom: 0;
+}
+
+/* 13. Lyrics */
+.scr-manuscript-editor .scr-el-lyrics {
+  padding-left: 1.25in;
+  padding-right: 1.25in;
+  font-style: italic;
+  margin-top: 10px;
+  margin-bottom: 0;
+  white-space: pre-wrap;
+}
+
+/* 14. Screenplay Image Node */
+.scr-manuscript-editor .ProseMirror > .node-screenplayImage,
+.scr-manuscript-editor .scr-el-image {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+/* 15. Dual Dialogue Structural Container & Grid */
+.scr-manuscript-editor .ProseMirror > .node-dualDialogue,
+.scr-manuscript-editor .scr-el-dual-dialogue-wrapper {
+  margin-top: 14px;
+  margin-bottom: 0;
+}
+
+.scr-manuscript-editor .scr-el-dual-dialogue-wrapper {
+  border-top: 1px dashed rgba(148, 163, 184, 0.45);
+  border-bottom: 1px dashed rgba(148, 163, 184, 0.45);
+  padding: 0.4rem 0;
+}
+
+.scr-manuscript-editor .scr-el-dual-dialogue-grid > div[data-node-view-content-react],
+.scr-manuscript-editor .scr-el-dual-dialogue-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.scr-manuscript-editor .scr-el-dual-column {
+  min-width: 0;
+  padding: 0.15rem 0.25rem;
+}
+
+.scr-manuscript-editor .scr-el-dual-column .scr-el-character {
+  padding-left: 0.55in;
+  padding-right: 0.1in;
+  margin-top: 4px;
+}
+
+.scr-manuscript-editor .scr-el-dual-column .scr-el-parenthetical {
+  padding-left: 0.3in;
+  padding-right: 0.2in;
+  margin-top: 0;
+}
+
+.scr-manuscript-editor .scr-el-dual-column .scr-el-dialogue {
+  padding-left: 0.05in;
+  padding-right: 0.1in;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* =========================================================================
+   SCENEOS SCREENPLAY GLASSMORPHISM SYSTEM
+   Restrained, translucent surfaces with controlled backdrop blur and fine rims.
+   ========================================================================= */
+
+.scr-glass-bar {
+  background: rgba(17, 20, 28, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.scr-glass-card {
+  background: rgba(20, 24, 34, 0.80);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+}
+
+.scr-glass-control {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.15s ease-in-out;
+}
+
+.scr-glass-control:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.scr-glass-tooltip {
+  background: rgba(15, 18, 26, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  color: #f1f5f9;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scr-glass-bar,
+  .scr-glass-card,
+  .scr-glass-control,
+  .scr-glass-tooltip,
+  .vault-glass-bar,
+  .vault-glass-pill,
+  .vault-glass-surface {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Vault Liquid-Glass System (Restrained floating chrome & active surfaces only) */
+.vault-glass-bar {
+  background: linear-gradient(135deg, rgba(16, 22, 38, 0.78), rgba(9, 13, 24, 0.88));
+  backdrop-filter: blur(16px) saturate(145%);
+  -webkit-backdrop-filter: blur(16px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(56, 189, 248, 0.08);
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vault-glass-bar:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.vault-glass-pill {
+  background: rgba(13, 18, 32, 0.72);
+  backdrop-filter: blur(12px) saturate(135%);
+  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.vault-glass-surface {
+  background: linear-gradient(160deg, rgba(20, 27, 46, 0.86), rgba(10, 14, 24, 0.94));
+  backdrop-filter: blur(14px) saturate(135%);
+  -webkit-backdrop-filter: blur(14px) saturate(135%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .vault-glass-bar,
+  .vault-glass-pill,
+  .vault-glass-surface {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #0d121f !important;
+  }
+}
+
+/* SceneOS Production Paperwork Print Styles (Call Sheets & DPRs) */
+@page {
+  size: letter portrait;
+  margin: 0.45in;
+}
+
+@media print {
+  body.sceneos-printing-production-doc {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  body.sceneos-printing-production-doc > *:not(#production-print-root) {
+    display: none !important;
+  }
+
+  body.sceneos-printing-production-doc #production-print-root {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.sceneos-printing-production-doc .prod-doc-no-print {
+    display: none !important;
+  }
+
+  .prod-doc-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  .prod-doc-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .prod-doc-table thead {
+    display: table-header-group;
+  }
+
+  .prod-doc-table tfoot {
+    display: table-footer-group;
+  }
+
+  .prod-doc-section,
+  .prod-doc-row {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+
+
+
+

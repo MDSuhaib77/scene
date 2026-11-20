@@ -1,0 +1,88 @@
+flowchart TD
+    %% SceneOS System Architecture Diagram
+    %% Midterm Project Review - Department of MCA
+
+    subgraph Layer1 ["1. Client Presentation Layer (React 19 + TypeScript + Tailwind CSS)"]
+        direction TB
+        Shell["Application Shell & Route State Machine (App.tsx)"]
+        
+        subgraph PreProdWorkspaces ["Production Planning Workspaces"]
+            W1["Overview (HUD)"]
+            W2["Screenplay & Scenes"]
+            W3["Roadmap & Phases"]
+            W4["Calendar & Stripboard"]
+            W5["Tasks & Kanban"]
+        end
+
+        subgraph ManagementWorkspaces ["Governance & Analytics Workspaces"]
+            W6["Crew Rolodex"]
+            W7["Guild Compliance"]
+            W8["Analytics & Trends"]
+            W9["Vault & Backups"]
+        end
+
+        Shell --> PreProdWorkspaces
+        Shell --> ManagementWorkspaces
+    end
+
+    subgraph Layer2 ["2. Domain Logic & Application Engines"]
+        AuthRBAC["<b>Auth & RBAC Manager</b><br/>Platform Roles vs Operational Titles"]
+        SchedEng["<b>Mathematical Scheduler</b><br/>recalculateSchedule & getPipelineMetrics"]
+        CompEng["<b>Indian Guild Safety Engine</b><br/>11-Point Evaluator (FWICE, FEFSI)"]
+        ParserHub["<b>Screenplay Parser Hub</b><br/>FDX, Fountain, PDF, DOCX, RTF, TXT"]
+    end
+
+    subgraph Layer3 ["3. Service Abstraction Contracts"]
+        IAuth["<b>IAuthService</b><br/>Sign-in, Personas, Session"]
+        IProj["<b>IProjectService</b><br/>Projects, Phases, Scenes, Crew"]
+        IAct["<b>IActivityService</b><br/>Event Streams & Decision Log"]
+    end
+
+    subgraph Layer4 ["4. Persistence & External Infrastructure"]
+        subgraph Verified_Local ["Implemented & Verified (Local)"]
+            LocalMock["Mock Services & In-Memory Store"]
+            LocalStore[("Browser LocalStorage & JSON Blueprints")]
+            LocalMock --> LocalStore
+        end
+
+        subgraph Cloud_Pending ["Implemented / Verification Pending"]
+            SupaAuth["Supabase GoTrue Auth"]
+            SupaDB[("Supabase PostgreSQL DB")]
+        end
+
+        subgraph External_Planned ["Planned External Services"]
+            CloudVault[("S3 / Cloud Media Storage")]
+            LLMAssist["LLM Screenplay Intelligence"]
+        end
+    end
+
+    %% Cross-Layer Wiring
+    W1 -.-> AuthRBAC
+    W2 --> ParserHub
+    W3 & W4 --> SchedEng
+    W5 & W7 --> CompEng
+    W8 --> SchedEng
+    W9 --> LocalStore
+
+    AuthRBAC --> IAuth
+    PreProdWorkspaces --> IProj
+    ManagementWorkspaces --> IProj
+    W1 --> IAct
+
+    IAuth --> LocalMock
+    IAuth -.-> SupaAuth
+    IProj --> LocalMock
+    IProj -.-> SupaDB
+    IAct --> LocalMock
+
+    W9 -.-> CloudVault
+    W2 -.-> LLMAssist
+
+    %% Styling & Legend
+    classDef verified fill:#0b192c,stroke:#00e5ff,stroke-width:2px,color:#ffffff;
+    classDef pending fill:#2a1f0a,stroke:#f59e0b,stroke-width:1.5px,color:#ffffff,stroke-dasharray: 4 4;
+    classDef planned fill:#261324,stroke:#ec4899,stroke-width:1.5px,color:#ffffff,stroke-dasharray: 2 2;
+
+    class Shell,W1,W2,W3,W4,W5,W6,W7,W8,W9,AuthRBAC,SchedEng,CompEng,ParserHub,IAuth,IProj,IAct,LocalMock,LocalStore verified;
+    class SupaAuth,SupaDB pending;
+    class CloudVault,LLMAssist planned;

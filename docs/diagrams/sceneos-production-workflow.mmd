@@ -1,0 +1,23 @@
+flowchart TD
+    %% SceneOS Film Production Workflow
+    %% Midterm Project Review - Department of MCA
+
+    subgraph Row1 ["Phase I: Creative & Breakdown Engineering"]
+        direction LR
+        S1["<b>1. Script Ingestion</b><br/>• Multi-format (.fdx, .fountain, .pdf, .docx)<br/>• Deterministic Slugline Parser<br/>• Hollywood Eighths Calculator"]
+        --> S2["<b>2. Scene Identity & Catalog</b><br/>• Content-Hash Scene IDs (scn-xxx)<br/>• INT/EXT & Day/Night Classification<br/>• Scene Review Tracking"]
+        --> S3["<b>3. Element Breakdown</b><br/>• Tagging: Cast, Props, Vehicles, Stunts, VFX<br/>• Scene-to-Department Association<br/>• Breakdown Completion Matrix"]
+    end
+
+    subgraph Row2 ["Phase II: Resources, Compliance & Execution"]
+        direction LR
+        S4["<b>4. Personnel & Guild Compliance</b><br/>• Master Departmental Crew Rolodex<br/>• 11-Rule Safety Engine (FWICE, FEFSI)<br/>• 12h Turnaround & Rest Guardrails"]
+        --> S5["<b>5. Production Scheduling</b><br/>• Milestone Roadmap (Pre, Prod, Post)<br/>• Dynamic Stripboard & Call Sheet Dates<br/>• Mathematical Overdue Tracking"]
+        --> S6["<b>6. Command Telemetry & Vault</b><br/>• Holographic Command HUD & 3 Gauges<br/>• 10% Completion Bond Burn Analytics<br/>• Cold Storage MD5 Footage Backups"]
+    end
+
+    S3 ==> S4
+
+    %% Visual Styling
+    classDef verified fill:#0b192c,stroke:#00e5ff,stroke-width:2px,color:#ffffff;
+    class S1,S2,S3,S4,S5,S6 verified;
