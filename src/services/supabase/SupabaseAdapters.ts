@@ -225,36 +225,58 @@ export class SupabaseAuthService implements IAuthService {
   }
 }
 
+const inMemoryOperationalCache = new Map<string, Partial<ProjectDomainModel>>();
+
 function loadOperationalData(projectId: string): Partial<ProjectDomainModel> {
+  const mem = inMemoryOperationalCache.get(projectId);
   try {
     if (typeof window !== 'undefined') {
       const raw = localStorage.getItem(`sceneos_production_${projectId}`);
-      if (raw) return JSON.parse(raw);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        return mem ? { ...parsed, ...mem } : parsed;
+      }
     }
   } catch (e) {
     console.warn(`[SupabaseAdapter] Failed to load operational data for ${projectId}:`, e);
   }
-  return {};
+  return mem || {};
 }
 
 function saveOperationalData(projectId: string, data: Partial<ProjectDomainModel>): void {
   try {
-    if (typeof window === 'undefined') return;
     const existing = loadOperationalData(projectId);
     const merged = { ...existing, ...data };
+    // Always preserve rich in-memory operational state (including full pdfLayout & coordinates)
+    inMemoryOperationalCache.set(projectId, merged);
+
+    if (typeof window === 'undefined') return;
+
+    // Build storage-safe payload for localStorage (5MB browser limit)
+    const storageMerged = { ...merged };
+    if (storageMerged.screenplayVersions && Array.isArray(storageMerged.screenplayVersions)) {
+      storageMerged.screenplayVersions = storageMerged.screenplayVersions.map((v: ScreenplayVersion) => {
+        // Strip heavy base64 data URL from localStorage to avoid quota overflow
+        const { sourcePdfDataUrl, ...rest } = v;
+        return rest as ScreenplayVersion;
+      });
+    }
+
     try {
-      localStorage.setItem(`sceneos_production_${projectId}`, JSON.stringify(merged));
+      localStorage.setItem(`sceneos_production_${projectId}`, JSON.stringify(storageMerged));
     } catch (quotaErr) {
-      console.warn(`[SupabaseAdapter] Storage quota exceeded while saving production ${projectId}. Pruning large blobs:`, quotaErr);
-      if (merged.screenplayVersions && Array.isArray(merged.screenplayVersions)) {
-        merged.screenplayVersions = merged.screenplayVersions.map(v => {
-          if (v.sourcePdfDataUrl && v.sourcePdfDataUrl.length > 50000) {
-            const { sourcePdfDataUrl, ...rest } = v;
+      console.warn(`[SupabaseAdapter] Storage quota exceeded while saving production ${projectId}. Pruning heavy AST blobs for localStorage:`, quotaErr);
+      try {
+        if (storageMerged.screenplayVersions && Array.isArray(storageMerged.screenplayVersions)) {
+          // If pdfLayout is present, the visual manuscript uses pdfLayout; prune redundant documentJson and content from localStorage
+          storageMerged.screenplayVersions = storageMerged.screenplayVersions.map((v: ScreenplayVersion) => {
+            const { sourcePdfDataUrl, documentJson, content, ...rest } = v;
             return rest as ScreenplayVersion;
-          }
-          return v;
-        });
-        localStorage.setItem(`sceneos_production_${projectId}`, JSON.stringify(merged));
+          });
+          localStorage.setItem(`sceneos_production_${projectId}`, JSON.stringify(storageMerged));
+        }
+      } catch (fallbackErr) {
+        console.warn(`[SupabaseAdapter] Secondary localStorage save also exceeded quota; runtime state safely preserved in memory:`, fallbackErr);
       }
     }
   } catch (e) {
@@ -738,7 +760,13 @@ export class SupabaseProjectService implements IProjectService {
           .single();
 
         if (!error && data) {
-          return assembleProject(data as Database['public']['Tables']['projects']['Row']);
+          const assembled = assembleProject(data as Database['public']['Tables']['projects']['Row']);
+          return {
+            ...assembled,
+            ...updates,
+            screenplayVersions: updates.screenplayVersions ?? assembled.screenplayVersions,
+            scenes: updates.scenes ?? assembled.scenes,
+          };
         }
       }
     } catch (e) {
@@ -747,7 +775,13 @@ export class SupabaseProjectService implements IProjectService {
 
     const base = await this.getProjectById(id);
     const op = loadOperationalData(id);
-    return { ...(base || {}), ...op, ...updates } as ProjectDomainModel;
+    return {
+      ...(base || {}),
+      ...op,
+      ...updates,
+      screenplayVersions: updates.screenplayVersions ?? op.screenplayVersions ?? base?.screenplayVersions,
+      scenes: updates.scenes ?? op.scenes ?? base?.scenes,
+    } as ProjectDomainModel;
   }
 
   async archiveProject(id: string): Promise<ProjectDomainModel> {
@@ -755,6 +789,7 @@ export class SupabaseProjectService implements IProjectService {
   }
 
   async deleteProject(id: string): Promise<void> {
+    inMemoryOperationalCache.delete(id);
     if (typeof window !== 'undefined') {
       localStorage.removeItem(`sceneos_production_${id}`);
     }
@@ -762,7 +797,10 @@ export class SupabaseProjectService implements IProjectService {
     saveLocalProjectsList(localList);
 
     try {
-      await this.client.from('projects').delete().eq('id', id);
+      const { error } = await this.client.from('projects').delete().eq('id', id);
+      if (error) {
+        console.warn('[SupabaseAdapter] Remote delete notice (RLS or unauthenticated):', error.message);
+      }
     } catch (e) {
       // Remote delete might fail if local-only or unauthenticated
     }

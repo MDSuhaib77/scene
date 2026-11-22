@@ -388,7 +388,7 @@ export class MockProjectService implements IProjectService {
         const saved = localStorage.getItem(MOCK_PROJECTS_STORAGE_KEY);
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length > 0) {
+          if (Array.isArray(parsed)) {
             this.projects = parsed.map((p: ProjectDomainModel) => ({
               ...p,
               persistence: 'mock' as const,
@@ -410,7 +410,19 @@ export class MockProjectService implements IProjectService {
     try {
       localStorage.setItem(MOCK_PROJECTS_STORAGE_KEY, JSON.stringify(this.projects));
     } catch {
-      // Ignore storage quota errors gracefully
+      // Storage quota safety: prune large dataUrl & redundant AST blobs from localStorage
+      try {
+        const pruned = this.projects.map((p: ProjectDomainModel) => ({
+          ...p,
+          screenplayVersions: (p.screenplayVersions || []).map((v: any) => {
+            const { sourcePdfDataUrl, documentJson, content, ...rest } = v;
+            return rest;
+          }),
+        }));
+        localStorage.setItem(MOCK_PROJECTS_STORAGE_KEY, JSON.stringify(pruned));
+      } catch {
+        // In-memory state remains fully intact in this.projects
+      }
     }
   }
 

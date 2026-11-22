@@ -207,7 +207,13 @@ function createScreenplayTextBlockNode(config: {
         styles.push(`font-size: ${HTMLAttributes['data-font-size']}pt`);
       }
       if (HTMLAttributes['data-font-family']) {
-        styles.push(`font-family: ${HTMLAttributes['data-font-family']}`);
+        const ff = String(HTMLAttributes['data-font-family']).toLowerCase();
+        // Disallow proportional serif / Times / Georgia from overriding standard Courier Prime
+        if (ff.includes('times') || ff.includes('georgia') || ff.includes('serif')) {
+          styles.push('font-family: var(--font-screenplay, "Courier Prime", monospace)');
+        } else {
+          styles.push(`font-family: ${HTMLAttributes['data-font-family']}`);
+        }
       }
       if (HTMLAttributes['data-font-weight']) {
         styles.push(`font-weight: ${HTMLAttributes['data-font-weight']}`);
@@ -219,7 +225,10 @@ function createScreenplayTextBlockNode(config: {
         styles.push(`text-align: ${HTMLAttributes['data-alignment']}`);
       }
       if (HTMLAttributes['data-indent-left']) {
-        styles.push(`padding-left: ${HTMLAttributes['data-indent-left']}in`);
+        // Prevent double margin: slugline and action are already positioned flush at 1.5in on page
+        if (config.name !== 'sceneHeading' && config.name !== 'action') {
+          styles.push(`padding-left: ${HTMLAttributes['data-indent-left']}in`);
+        }
       }
       if (HTMLAttributes['data-indent-right']) {
         styles.push(`padding-right: ${HTMLAttributes['data-indent-right']}in`);
